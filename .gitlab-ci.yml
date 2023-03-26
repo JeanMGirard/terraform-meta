@@ -1,9 +1,10 @@
 include:
-  # - template: Terraform-Module.gitlab-ci.yml
+  - template: Terraform-Module.gitlab-ci.yml
   - { project: Jean.M.Girard/devops/templates, file: tasks/terraform.yml, ref: develop }
 
 
 stages:
+  - fmt
   - validate
   - test
   - deploy
@@ -19,6 +20,7 @@ lint:
 #docs:
 #  stage: docs
 #  extends: [.terraform:docs]
+
 
 upload:
   extends: [.terraform:upload]
