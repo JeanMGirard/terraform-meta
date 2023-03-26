@@ -1,0 +1,76 @@
+
+variable "meta" {
+  type = any
+  default = {}
+}
+
+//noinspection TFNoInterpolationsAllowed
+module "meta" {
+  source        = "${module_path}"
+  meta          = var.meta
+  env           = var.environment
+  region        = var.region
+  location      = var.location
+  ns            = var.ns
+  stack         = var.stack
+  component     = var.component
+  tags          = merge(lookup(var.meta, "tags", {}), (var.tags == null ? {} : var.tags))
+}
+
+locals {
+  meta = { for k, v in module.meta : k => v if v != null && v != ""  }
+  env           = lookup(local.meta, "env", "")
+  environment   = lookup(local.meta, "environment", "")
+  region        = lookup(local.meta, "region", "")
+  region_code   = lookup(local.meta, "region_code", "")
+  aws_region    = lookup(local.meta, "aws_region", "")
+  location      = lookup(local.meta, "location", "eastus")
+  location_global = lookup(local.meta, "location_global", lookup(local.meta, "location", "eastus"))
+  location_name  = lookup(local.meta, "location_name", lookup(local.meta, "location", "Us.East"))
+  ns            = lookup(local.meta, "ns", "")
+  stack         = lookup(local.meta, "stack", "")
+  component     = lookup(local.meta, "component", "")
+  all_tags      = lookup(local.meta, "all_tags", merge(local.default_tags, local.tags))
+  default_tags  = lookup(local.meta, "default_tags", {})
+  tags          = lookup(local.meta, "tags", {})
+}
+
+# ==========================================================================
+# ====== Outputs ===========================================================
+# ==========================================================================
+output "meta" {
+  value       = local.meta
+  description = "Metadata"
+}
+
+# ==========================================================================
+# ====== Common Variables ==================================================
+# ==========================================================================
+variable "environment" {
+  type    = string
+  default = null
+}
+variable "ns" {
+  type    = string
+  default = null
+}
+variable "stack" {
+  type    = string
+  default = null
+}
+variable "component" {
+  type    = string
+  default = null
+}
+variable "region" {
+  type    = string
+  default = null
+}
+variable "location" {
+  type    = string
+  default = null
+}
+variable "tags" {
+  type    = map(string)
+  default = {}
+}

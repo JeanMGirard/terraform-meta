@@ -1,0 +1,33 @@
+include:
+  - template: Terraform-Module.gitlab-ci.yml
+  - { project: Jean.M.Girard/devops/templates, file: tasks/terraform.yml, ref: develop }
+
+
+
+stages:
+  - test
+  - deploy
+
+
+#validate:
+#  stage: test
+#  extends: [.terraform:validate]
+
+lint:
+  stage: test
+  extends: [.terraform:lint]
+
+#docs:
+#  stage: docs
+#  extends: [.terraform:docs]
+
+upload:
+  extends: [.terraform:upload]
+  stage: deploy
+  variables:
+    TERRAFORM_MODULE_DIR: $CI_PROJECT_DIR
+    TERRAFORM_MODULE_NAME: meta
+    TERRAFORM_MODULE_SYSTEM: local
+    TERRAFORM_MODULE_VERSION: $CI_COMMIT_TAG
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v([0-9|\.]+)/'
