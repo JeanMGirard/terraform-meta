@@ -1,4 +1,3 @@
-
 locals {
   to_az_location = merge(
     # default: {country}{region}
@@ -17,7 +16,10 @@ locals {
   )
   to_az_location_name = merge(
     # default: {Country}{Region}
-    {for pair in setproduct(local.countries, local.cardinalities) : join("-", pair) => join("", [title(pair[0]), title(pair[1])])},
+    {
+      for pair in setproduct(local.countries, local.cardinalities) : join("-", pair) =>
+      join("", [title(pair[0]), title(pair[1])])
+    },
     {
       # Exceptions
       "global"         = "Global"

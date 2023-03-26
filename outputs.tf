@@ -12,8 +12,9 @@ output "location_name" { value = local.location_name }
 output "ns" { value = local.ns }
 output "stack" { value = local.stack }
 output "component" { value = local.component }
-output "default_tags" { value = local.default_tags }
+output "default_tags" { value = merge(local.default_tags, (local.merge_tags ? local.tags : {})) }
+output "all_tags" { value = local.all_tags }
 output "tags" { value = local.tags }
-output "cloud" { value = local.cloud }
-
-
+output "azure_cloud" { value = local.azure_cloud }
+output "aws_region" { value = local.aws_region }
+output "merge_tags" { value = local.merge_tags }

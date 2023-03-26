@@ -1,0 +1,44 @@
+version: "3"
+
+tasks:
+  default:
+    deps: [ format, docs ]
+
+  format:
+    summary: Format Terraform files
+    desc: Format Terraform files
+    silent: true
+    cmds:
+      - terraform fmt  -recursive -write=true
+
+  docs:
+    summary: Update Terraform docs
+    desc: Update Terraform docs
+    silent: true
+    cmds:
+      - terraform-docs .
+
+  version:
+    summary: Increment module version.
+    desc: Print Terraform version
+    silent: true
+    cmds:
+      - terraform version
+
+  install:windows:
+    summary: Install dependencies on Windows
+    desc: Install dependencies on Windows
+    silent: true
+    status:
+      - get-command terraform-docs
+    cmds:
+      - choco install terraform-docs
+
+  install:linux:
+    summary: Install dependencies on Linux
+    desc: Install dependencies on Linux
+    silent: true
+    status:
+      - which terraform-docs
+    cmds:
+      - apt install terraform-docs
